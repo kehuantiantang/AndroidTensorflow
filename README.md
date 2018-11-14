@@ -20,7 +20,7 @@
 
 #### Problem
 - TensorFlow Lite操作数类型
-默认只支持， float32和uint8的类型，这样就是意味着在放入到Android中，`BYTE_SIZE_OF_FLOAT = 4 OR 1(float32, uint8, 32/8, 8/8)`
+默认只支持， float32和uint8的类型，这样就是意味着在放入到Android中，`BYTE_SIZE_OF_FLOAT = 4 OR 1(float32, uint8, 32/8, 8/8, 非量化32， 量化8)`
 - 支持操作[函数](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/lite/g3doc/tf_ops_compatibility.md)
 - Android SDK over than 23
 - TensorFlow over than 1.8
@@ -41,7 +41,14 @@ E/AndroidRuntime: FATAL EXCEPTION: CameraBackground
 该问题一般是由于`DIM_IMG_SIZE_X， DIM_IMG_SIZE_Y， 或者是DIM_PIXEL_SIZE没有设置正确`
 - 使用tflite或者是.h5文件在server端正确，到android端出现错误，无法正确识别
 一个很重要的问题就是**输入**和**输出**，输入一定要按照训练的时候来输入，如果你做了augmentation，`均一化`数据，这样在android中也需要均一化。
-输出一般是softmax对应assert/.txt文件，顺序和训练时一定要对应，并且不能有多余换行，否则会报输出的错
+输出一般是softmax对应assert/xx.txt文件，顺序和训练时一定要对应，并且不能有多余换行，否则会报输出的错
+```java
+// pixelValue is the real value take from photo range to 0 - 255, if has preprocessing, the value should minu or divide a number
+imgData.putFloat(((pixelValue >> 16) & 0xFF) / IMAGE_STD);
+imgData.putFloat(((pixelValue >> 8) & 0xFF) / IMAGE_STD);
+imgData.putFloat((pixelValue & 0xFF)/ IMAGE_STD);
+```
+
 - Android Bitmap出现NullPointException问题,可以按照以下comment进行更改
 
 ```java
