@@ -43,7 +43,7 @@ E/AndroidRuntime: FATAL EXCEPTION: CameraBackground
 一个很重要的问题就是**输入**和**输出**，输入一定要按照训练的时候来输入，如果你做了augmentation，`均一化`数据，这样在android中也需要均一化。
 输出一般是softmax对应assert/xx.txt文件，顺序和训练时一定要对应，并且不能有多余换行，否则会报输出的错
 ```java
-// pixelValue is the real value take from photo range to 0 - 255, if has preprocessing, the value should minu or divide a number
+// pixelValue is the real value take from photo range to 0 - 255, if has preprocessing, the value should minus or divide a number
 imgData.putFloat(((pixelValue >> 16) & 0xFF) / IMAGE_STD);
 imgData.putFloat(((pixelValue >> 8) & 0xFF) / IMAGE_STD);
 imgData.putFloat((pixelValue & 0xFF)/ IMAGE_STD);
